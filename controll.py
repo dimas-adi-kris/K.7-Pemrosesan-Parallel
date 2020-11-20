@@ -1,13 +1,14 @@
 from paramiko.client import SSHClient,AutoAddPolicy
 from getpass import getpass
+ssh = input("Ssh: ")
 passhehe = getpass()
-
+username = input("Username: ")
 
 client = SSHClient()
 # client2 = SSHClient()
 
 client.set_missing_host_key_policy(AutoAddPolicy())
-client.connect("10.1.13.106",22,"ldimas",passhehe)
+client.connect(ssh,22,username,passhehe)
 
 # client2.set_missing_host_key_policy(AutoAddPolicy())
 # client2.connect("10.1.14.144",22,"dimasdi",passhehe)

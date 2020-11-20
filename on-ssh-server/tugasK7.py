@@ -19,7 +19,7 @@ rec_interval = rec_total_after - rec_total_before
 print('''
 _______________________________________
 Node 1					|''')
-print(psu.net_connections('inet4')[1].laddr.ip,'	|')
+print(psu.net_connections('inet4')[1].laddr.ip,'	        |')
 print("CPU Usage : {}%			|".format(psu.cpu_percent()))
 print("Memory usage : {}%			|".format(psu.virtual_memory()[2]))
 print("Internet tranffic :			|")
