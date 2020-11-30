@@ -1,4 +1,7 @@
 from paramiko.client import SSHClient,AutoAddPolicy
+# import paramiko.socket.gaierror as gai
+import sys
+import socket
 from getpass import getpass
 ssh = input("Ssh: ")
 passhehe = getpass()
@@ -8,8 +11,27 @@ client = SSHClient()
 # client2 = SSHClient()
 
 client.set_missing_host_key_policy(AutoAddPolicy())
-client.connect(ssh,22,username,passhehe)
+try:
+  client.connect(ssh,22,username,passhehe)
+  status = 'ONLINE'
+except socket.gaierror:
+  status = 'OFFLINE'
+# client.connect(ssh,22,username,passhehe)
 
+menu = True
+while(menu):
+  print('Status perangkat : {} ({})'.format(ssh,status))
+  print('Menu \n 1. print do something\n 2. exit')
+  input_menu = input('Masukkan pilihan aksi : ')
+  if (input_menu == '1'):
+    print('Do Something')
+  elif (input_menu == '0'):
+    print('exit')
+    sys.exit()
+    # menu = False
+    
+sys.exit()
+print('Status perangkat : {} ({})'.format(ssh,status))
 # client2.set_missing_host_key_policy(AutoAddPolicy())
 # client2.connect("10.1.14.144",22,"dimasdi",passhehe)
 
