@@ -6,7 +6,7 @@ ssh = '10.1.13.106'
 passhehe = 'root'
 username = 'ldimas'
 
-ssh2 = '10.10.10.10'
+ssh2 = '10.1.12.41'
 passhehe2 = 'root'
 username2 = 'ldimas'
 
@@ -39,16 +39,20 @@ def write_it(a):
 
 
 def sendandcount_it(cc):
-    sftp = cc.open_sftp()
-    sftp.put('./file_send.txt', './input.txt')
-    stdin, stdout, stderr = cc.exec_command('python3 luaspersegi.py')
-    baris = stdout.readlines()
-    baris_err = stderr.readlines()
+    print('_______________________')
+    try:
+        sftp = cc.open_sftp()
+        sftp.put('./file_send.txt', './input.txt')
+        stdin, stdout, stderr = cc.exec_command('python3 luaspersegi.py')
+        baris = stdout.readlines()
+        baris_err = stderr.readlines()
 
-    for i in baris_err:
-        print(i)
-    for i in baris:
-        print(i)
+        for i in baris_err:
+            print(i)
+        for i in baris:
+            print(i)
+    except:
+        print("Client ini sedang OFFLINE")
 
 
 menu = True
@@ -74,8 +78,8 @@ while(menu):
         write_it(a)
         sendandcount_it(client[0])
         sendandcount_it(client[1])
-    keluar = input("Hentikan Program?(Y)")
-    if (keluar == 'Y'):
+    keluar = input("Hentikan Program?(Y/y)")
+    if (keluar == 'Y' or keluar == 'y'):
         for i in client:
             i.close()
         sys.exit()
