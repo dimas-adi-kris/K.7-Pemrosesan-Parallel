@@ -3,18 +3,19 @@ import sys
 import socket
 # from getpass import getpass
 ssh = '10.1.13.106'
-passhehe = 'root'
 username = 'ldimas'
+passhehe = 'root'
 
 ssh2 = '10.1.12.41'
-passhehe2 = 'root'
 username2 = 'ldimas'
+passhehe2 = 'root'
 
 client = []
 status = []
 client.append(SSHClient())
 client.append(SSHClient())
 
+print("Mencoba menghubungkan ke client yang terdaftar")
 
 client[0].set_missing_host_key_policy(AutoAddPolicy())
 try:
@@ -29,6 +30,70 @@ try:
     status.append('ONLINE')
 except (socket.gaierror, socket.timeout):
     status.append('OFFLINE')
+print('''
+_______________________________________________
+|               {} Status : {}                 |
+|               {} Status : {}                 |
+|______________________________________________|
+    '''.format(ssh,  status[0],
+               ssh2, status[1])
+      )
+
+
+def pilihan():
+    print('''
+_______________________________________________
+1. Hitung luas dan keliling segitiga
+2. Hitung luas dan keliling lingkaran
+3. Hitung luas dan keliling persegi
+
+
+0. Force stop
+
+    ''')
+    choice = input('Pilih operasi yang diinginkan : ')
+    return choice
+
+
+def inp_sisi(masukan):
+    if masukan == '1':
+        print('''
+    |\ 
+    | \ 
+  a |  \ c
+    |   \ 
+    |____\ 
+      b
+        ''')
+        a = input('a : ')
+        b = input('b : ')
+        c = input('c : ')
+        return [a, b, c]
+    elif masukan == '2':
+        print('''
+    ________
+   /        \ 
+  /          \ 
+ /      __r___\ 
+ \            /
+  \          /
+   \________/
+        ''')
+        r = input('r : ')
+        return [r]
+    elif masukan == '3':
+        print('''
+_________________
+|               |
+|               |
+|               | p
+|               |
+|_______________|
+        l
+        ''')
+        p = input('p : ')
+        l = input('l : ')
+        return [p, l]
 
 
 def write_it(a):
@@ -40,10 +105,13 @@ def write_it(a):
 
 def sendandcount_it(cc):
     print('_______________________')
+    print('Mencoba menghubungkan menggunakan sftp')
     try:
         sftp = cc.open_sftp()
+        print('Terhubung ke client')
+        print('Sedang mengirim...')
         sftp.put('./file_send.txt', './input.txt')
-        stdin, stdout, stderr = cc.exec_command('python3 luaspersegi.py')
+        stdin, stdout, stderr = cc.exec_command('python3 hitung.py')
         baris = stdout.readlines()
         baris_err = stderr.readlines()
 
@@ -55,12 +123,38 @@ def sendandcount_it(cc):
         print("Client ini sedang OFFLINE")
 
 
+def CloseAllClient(cli):
+    for i in cli:
+        i.close()
+
+
 menu = True
 while(menu):
-    a = ['0', '0']
-    a[0] = input("Masukkan panjang :")
-    a[1] = input("Masukkan lebar :")
-    print('''Pilih client
+    pilih_menu = True
+    menu_rumus = []
+    while(pilih_menu):
+        menu_rumus.clear()
+        menu_rumus.append(pilihan())
+        if menu_rumus[0] == '1' or menu_rumus[0] == '2' or menu_rumus[0] == '3':
+            menu_rumus = menu_rumus + inp_sisi(menu_rumus[0])
+            pilih_menu = False
+        elif menu_rumus[0] == '0':
+            pilih_menu = False
+            menu = False
+            CloseAllClient(client)
+            sys.exit()
+        else:
+            print('''
+_______________________________________________
+
+    MASUKKAN PILIHAN YANG BENAR!!!
+
+_______________________________________________
+''')
+
+    print('''
+_______________________________________________
+Pilih client
     1. {}. Status : {}
     2. {}. Status : {}
     3. Jalankan di kedua client
@@ -69,17 +163,21 @@ while(menu):
           )
     input_menu = input('Pilih Client : ')
     if (input_menu == '1'):
-        write_it(a)
+        print('Client yang dipilih : '+ssh)
+        write_it(menu_rumus)
         sendandcount_it(client[0])
     elif (input_menu == '2'):
-        write_it(a)
+        print('Client yang dipilih : '+ssh2)
+        write_it(menu_rumus)
         sendandcount_it(client[1])
     elif (input_menu == '3'):
-        write_it(a)
+        write_it(menu_rumus)
+        print('Client yang dipilih : '+ssh)
         sendandcount_it(client[0])
+        print('Client yang dipilih : '+ssh2)
         sendandcount_it(client[1])
     keluar = input("Hentikan Program?(Y/y)")
     if (keluar == 'Y' or keluar == 'y'):
-        for i in client:
-            i.close()
-        sys.exit()
+        CloseAllClient(client)
+        # sys.exit()
+        menu = False
