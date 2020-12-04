@@ -6,3 +6,5 @@ Anggota kelompok:
 - DIMAS ADITYA KRISTIANTO
 - FAKHRI RAIHAN ALHAFIZ
 - MUHAMMAD FAZRIL FAHRI
+
+# Menghitung luas bangun datar menggunakan virtualbox yang dihubungkan dengan ssh
