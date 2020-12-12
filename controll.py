@@ -31,10 +31,10 @@ try:
 except (socket.gaierror, socket.timeout):
     status.append('OFFLINE')
 print('''
-_______________________________________________
-|               {} Status : {}                 |
-|               {} Status : {}                 |
-|______________________________________________|
+_________________________________________
+|\t{} Status : {}\t|
+|\t{} Status : {}\t|
+|_______________________________________|
     '''.format(ssh,  status[0],
                ssh2, status[1])
       )
@@ -42,6 +42,7 @@ _______________________________________________
 
 def pilihan():
     print('''
+\t AWAL PROGRAM
 _______________________________________________
 1. Hitung luas dan keliling segitiga
 2. Hitung luas dan keliling lingkaran
@@ -104,7 +105,7 @@ def write_it(a):
 
 
 def sendandcount_it(cc):
-    print('_______________________')
+    print('_______________________________________________')
     print('Mencoba menghubungkan menggunakan sftp')
     try:
         sftp = cc.open_sftp()
@@ -121,6 +122,7 @@ def sendandcount_it(cc):
             print(i)
     except:
         print("Client ini sedang OFFLINE")
+    print('_______________________________________________')
 
 
 def CloseAllClient(cli):
@@ -176,8 +178,8 @@ Pilih client
         sendandcount_it(client[0])
         print('Client yang dipilih : '+ssh2)
         sendandcount_it(client[1])
-    keluar = input("Hentikan Program?(Y/y)")
+    keluar = input(
+        "Hentikan Program?\nInput Y/y untuk berhenti\nInput yg lain untuk melanjutkan\nInput : ")
     if (keluar == 'Y' or keluar == 'y'):
         CloseAllClient(client)
-        # sys.exit()
         menu = False
